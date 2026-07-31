@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600;700&display=swap");
+
+@theme {
+  --font-titulos: "Barlow Condensed", sans-serif;
+  --font-texto: "Barlow", sans-serif;
+
+  --color-vermelho: #C0281C;
+  --color-vermelho-escuro: #8F1D14;
+  --color-vinho: #7A1710;
+  --color-amarelo: #FFC53D;
+  --color-whatsapp: #25D366;
+  --color-fundo-claro: #FAF7F0;
+  --color-rodape: #2b120f;
+}
+
+body {
+  font-family: var(--font-texto);
+  background-color: var(--color-fundo-claro);
+}
