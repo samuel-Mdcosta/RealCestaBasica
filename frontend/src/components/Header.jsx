@@ -1,7 +1,29 @@
 import { useEffect, useState } from "react"
-import { marca, topbar, header, footer } from "../data/siteContent"
+import { Link, NavLink } from "react-router-dom"
+import { marca, topbar, header } from "../data/siteContent"
+import BotaoWhatsApp from "./BotaoWhatsApp"
 
-const whatsappUrl = `https://wa.me/${footer.whatsapp}`
+function ItemMenu({ item, onClick, className = "" }) {
+  if (!item.to) {
+    return (
+      <span className={`hover:text-vermelho cursor-pointer ${className}`}>
+        {item.nome}
+      </span>
+    )
+  }
+
+  return (
+    <NavLink
+      to={item.to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        `${isActive ? "text-vermelho" : "hover:text-vermelho"} ${className}`
+      }
+    >
+      {item.nome}
+    </NavLink>
+  )
+}
 
 function Busca({ className = "" }) {
   return (
@@ -53,13 +75,13 @@ export default function Header() {
 
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-4 lg:gap-8 py-3">
-          <a href="/" className="flex-shrink-0">
+          <Link to="/" className="flex-shrink-0">
             <img
               src={marca.logo}
               alt={marca.nome}
               className="h-16 lg:h-20 w-auto object-contain"
             />
-          </a>
+          </Link>
 
           <Busca className="hidden md:block flex-grow min-w-0 max-w-md" />
 
@@ -67,24 +89,19 @@ export default function Header() {
             <nav className="hidden lg:block">
               <ul className="flex items-center gap-6 text-sm font-bold text-vermelho-escuro font-titulos uppercase tracking-wide">
                 {header.menu.map((item) => (
-                  <li
-                    key={item}
-                    className="hover:text-vermelho cursor-pointer whitespace-nowrap"
-                  >
-                    {item}
+                  <li key={item.nome}>
+                    <ItemMenu item={item} className="whitespace-nowrap" />
                   </li>
                 ))}
               </ul>
             </nav>
 
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:flex flex-shrink-0 items-center gap-2 bg-whatsapp hover:brightness-95 transition-all text-white font-bold text-sm px-4 py-2.5 rounded-full shadow-sm whitespace-nowrap"
+            <BotaoWhatsApp
+              mensagem="Olá! Quero fazer um pedido."
+              className="hidden sm:flex flex-shrink-0 text-sm px-4 py-2.5 rounded-full shadow-sm whitespace-nowrap"
             >
               {header.cta}
-            </a>
+            </BotaoWhatsApp>
 
             <button
               type="button"
@@ -120,23 +137,25 @@ export default function Header() {
             <ul className="text-sm font-bold text-vermelho-escuro font-titulos uppercase tracking-wide">
               {header.menu.map((item) => (
                 <li
-                  key={item}
+                  key={item.nome}
                   onClick={() => setMenuAberto(false)}
-                  className="py-3 border-b border-gray-100 hover:text-vermelho cursor-pointer"
+                  className="border-b border-gray-100"
                 >
-                  {item}
+                  <ItemMenu
+                    item={item}
+                    onClick={() => setMenuAberto(false)}
+                    className="block py-3"
+                  />
                 </li>
               ))}
             </ul>
 
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="sm:hidden flex items-center justify-center gap-2 bg-whatsapp hover:brightness-95 transition-all text-white font-bold text-sm px-4 py-3 rounded-full shadow-sm my-3"
+            <BotaoWhatsApp
+              mensagem="Olá! Quero fazer um pedido."
+              className="sm:hidden flex text-sm px-4 py-3 rounded-full shadow-sm my-3"
             >
               {header.cta}
-            </a>
+            </BotaoWhatsApp>
           </nav>
         )}
       </div>

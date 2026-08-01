@@ -1,29 +1,14 @@
+import { Link } from "react-router-dom"
 import {
   hero,
   cestasSection,
-  cestas,
+  cestasHome,
   mercadoSection,
   mercadoCategorias,
-  comoFunciona,
 } from "../data/siteContent"
-
-const stripePattern = {
-  backgroundImage:
-    "repeating-linear-gradient(45deg, #ece0c4 0px, #ece0c4 12px, #e3d3ab 12px, #e3d3ab 24px)",
-}
-
-function PlaceholderFoto({ texto, className = "" }) {
-  return (
-    <div
-      style={stripePattern}
-      className={`flex items-center justify-center ${className}`}
-    >
-      <span className="bg-white/70 border border-black/10 text-gray-500 text-xs font-mono px-3 py-1 rounded">
-        {texto}
-      </span>
-    </div>
-  )
-}
+import PlaceholderFoto from "../components/PlaceholderFoto"
+import CardCesta from "../components/CardCesta"
+import ComoFunciona from "../components/ComoFunciona"
 
 function Preco({ valor, className = "", centavosClassName = "" }) {
   const [inteiro, centavos] = valor.split(",")
@@ -61,18 +46,22 @@ export default function Home() {
             />
 
             <div className="mt-6 flex flex-wrap gap-3">
-              {hero.botoes.map((botao, i) => (
-                <button
-                  key={botao}
-                  className={
-                    i === 0
-                      ? "bg-vermelho-escuro text-white font-bold px-6 py-3 rounded-md hover:brightness-110 transition-all"
-                      : "bg-white text-gray-900 font-bold px-6 py-3 rounded-md shadow-sm hover:brightness-95 transition-all"
-                  }
-                >
-                  {botao}
-                </button>
-              ))}
+              {hero.botoes.map((botao, i) => {
+                const estilo =
+                  i === 0
+                    ? "bg-vermelho-escuro text-white font-bold px-6 py-3 rounded-md hover:brightness-110 transition-all"
+                    : "bg-white text-gray-900 font-bold px-6 py-3 rounded-md shadow-sm hover:brightness-95 transition-all"
+
+                return botao.to ? (
+                  <Link key={botao.texto} to={botao.to} className={estilo}>
+                    {botao.texto}
+                  </Link>
+                ) : (
+                  <button key={botao.texto} className={estilo}>
+                    {botao.texto}
+                  </button>
+                )
+              })}
             </div>
 
             <p className="text-sm text-vermelho-escuro/70 mt-4">{hero.nota}</p>
@@ -89,42 +78,17 @@ export default function Home() {
           <h2 className="font-titulos font-extrabold text-3xl md:text-4xl text-black uppercase">
             {cestasSection.titulo}
           </h2>
-          <a href="#" className="text-vermelho font-bold text-sm hover:underline whitespace-nowrap">
+          <Link
+            to="/cestas"
+            className="text-vermelho font-bold text-sm hover:underline whitespace-nowrap"
+          >
             {cestasSection.linkComparacao}
-          </a>
+          </Link>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {cestas.map((cesta) => (
-            <div
-              key={cesta.sigla}
-              className="bg-white rounded-2xl shadow-sm border border-black/5 overflow-hidden flex flex-col"
-            >
-              <div className="relative h-56">
-                <PlaceholderFoto texto={cesta.foto} className="h-full w-full" />
-                <span className="absolute top-3 left-3 bg-amarelo text-vermelho-escuro font-bold text-xs px-3 py-1 rounded font-titulos tracking-wide">
-                  {cesta.tag}
-                </span>
-              </div>
-
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="font-titulos font-bold text-2xl">{cesta.nome}</h3>
-                <p className="text-gray-600 text-sm mt-2 flex-grow">{cesta.descricao}</p>
-
-                <p className="text-sm text-gray-500 mt-4">
-                  {cesta.itens} itens • rende {cesta.rende}
-                </p>
-
-                <div className="flex items-center justify-between mt-6">
-                  <span className="font-titulos font-extrabold text-2xl text-vermelho">
-                    {cesta.preco}
-                  </span>
-                  <button className="bg-whatsapp text-white font-bold px-4 py-2 rounded-full hover:brightness-95 transition-all">
-                    Pedir agora
-                  </button>
-                </div>
-              </div>
-            </div>
+          {cestasHome.map((cesta) => (
+            <CardCesta key={cesta.sigla} cesta={cesta} />
           ))}
         </div>
       </section>
@@ -152,21 +116,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-vermelho text-white">
-        <div className="container mx-auto px-4 py-12 grid md:grid-cols-3 gap-8">
-          {comoFunciona.map((passo) => (
-            <div key={passo.passo} className="flex items-start gap-4">
-              <span className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-full bg-amarelo text-vermelho-escuro font-titulos font-extrabold text-lg">
-                {passo.passo}
-              </span>
-              <div>
-                <h3 className="font-titulos font-bold text-lg">{passo.titulo}</h3>
-                <p className="text-white/80 text-sm mt-1">{passo.descricao}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ComoFunciona />
     </main>
   )
 }
