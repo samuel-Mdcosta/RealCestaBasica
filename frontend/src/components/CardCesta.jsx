@@ -1,5 +1,6 @@
 import PlaceholderFoto from "./PlaceholderFoto"
 import BotaoWhatsApp from "./BotaoWhatsApp"
+import { mensagemCesta } from "../utils/whatsapp"
 
 export default function CardCesta({ cesta }) {
   return (
@@ -24,7 +25,7 @@ export default function CardCesta({ cesta }) {
             {cesta.preco}
           </span>
           <BotaoWhatsApp
-            mensagem={`Olá! Quero pedir a ${cesta.nome} (${cesta.preco}).`}
+            mensagem={mensagemCesta(cesta)}
             className="px-4 py-2 rounded-full"
           >
             Pedir agora
