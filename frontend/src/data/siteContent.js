@@ -11,7 +11,7 @@ export const topbar = [
 
 export const header = {
   busca: "Buscar arroz, feijão, óleo, sabão…",
-  menu: ["Cestas", "Mercado", "Ofertas", "Empresas"],
+  menu: ["Cestas", "Mercado", "Ofertas"],
   cta: "Pedir no WhatsApp",
 }
 
