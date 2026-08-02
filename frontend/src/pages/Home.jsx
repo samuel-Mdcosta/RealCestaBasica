@@ -98,11 +98,11 @@ export default function Home() {
           <h2 className="font-titulos font-extrabold text-3xl md:text-4xl text-black uppercase mb-8">
             {mercadoSection.titulo}
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             {mercadoCategorias.map((cat) => (
               <div
                 key={cat.nome}
-                className="flex flex-col items-center justify-center gap-3 bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                className="basis-[calc(50%-0.5rem)] sm:basis-[calc(33.333%-0.667rem)] md:basis-[calc(16.666%-0.834rem)] flex flex-col items-center justify-center gap-3 bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
               >
                 <span className="h-14 w-14 rounded-full bg-amarelo/30 flex items-center justify-center text-2xl">
                   {cat.icone}

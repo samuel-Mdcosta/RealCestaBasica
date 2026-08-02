@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { cestas } from "../data/siteContent"
 import {
   cestasHero,
@@ -12,11 +12,40 @@ import ComoFunciona from "../components/ComoFunciona"
 
 export default function Cestas() {
   const [expandido, setExpandido] = useState(false)
+  const [destaque, setDestaque] = useState(comparacao.destaque)
+  const tabelaRef = useRef(null)
 
   const visiveis = expandido
     ? cestas
     : cestas.slice(0, cestasListagem.visiveisInicial)
   const restantes = cestas.length - visiveis.length
+
+  const centralizarColuna = (coluna) => {
+    const scroller = tabelaRef.current
+    const celula = scroller?.querySelector(`[data-coluna="${coluna}"]`)
+    if (!scroller || !celula) return
+
+    const deslocamento =
+      celula.getBoundingClientRect().left -
+      scroller.getBoundingClientRect().left +
+      scroller.scrollLeft
+
+    scroller.scrollTo({
+      left: deslocamento - (scroller.clientWidth - celula.offsetWidth) / 2,
+      behavior: "smooth",
+    })
+  }
+
+  const selecionarCesta = (cesta) => {
+    const coluna = cestas.indexOf(cesta)
+    if (coluna === -1) return
+
+    setDestaque(coluna)
+    document
+      .getElementById("comparacao")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" })
+    centralizarColuna(coluna)
+  }
 
   return (
     <main className="flex-grow">
@@ -43,7 +72,12 @@ export default function Cestas() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {visiveis.map((cesta) => (
-            <CardCesta key={cesta.sigla} cesta={cesta} />
+            <CardCesta
+              key={cesta.sigla}
+              cesta={cesta}
+              selecionada={cestas.indexOf(cesta) === destaque}
+              onSelecionar={() => selecionarCesta(cesta)}
+            />
           ))}
         </div>
 
@@ -61,14 +95,17 @@ export default function Cestas() {
         )}
       </section>
 
-      <section id="comparacao" className="bg-fundo-claro">
+      <section
+        id="comparacao"
+        className="bg-fundo-claro scroll-mt-44 md:scroll-mt-36"
+      >
         <div className="container mx-auto px-4 py-16">
           <h2 className="font-titulos font-extrabold text-3xl md:text-4xl text-black uppercase mb-8">
             {comparacao.titulo}
           </h2>
 
           <div className="bg-white rounded-2xl shadow-sm border border-black/5 overflow-hidden">
-            <div className="overflow-x-auto">
+            <div ref={tabelaRef} className="overflow-x-auto">
               <table className="w-full min-w-[880px] border-collapse">
                 <thead>
                   <tr className="bg-vermelho text-white font-titulos font-bold tracking-wide">
@@ -76,8 +113,9 @@ export default function Cestas() {
                     {comparacao.colunas.map((coluna, i) => (
                       <th
                         key={coluna}
-                        className={`px-2 py-3 text-center ${
-                          i === comparacao.destaque ? "bg-vermelho-escuro" : ""
+                        data-coluna={i}
+                        className={`px-2 py-3 text-center transition-colors ${
+                          i === destaque ? "bg-vermelho-escuro" : ""
                         }`}
                       >
                         {coluna}
@@ -95,8 +133,8 @@ export default function Cestas() {
                       {linha.valores.map((valor, i) => (
                         <td
                           key={comparacao.colunas[i]}
-                          className={`px-2 py-2.5 text-center text-sm ${
-                            i === comparacao.destaque
+                          className={`px-2 py-2.5 text-center text-sm transition-colors ${
+                            i === destaque
                               ? "bg-amarelo/15 font-bold text-vinho"
                               : "text-gray-500"
                           }`}
@@ -116,8 +154,8 @@ export default function Cestas() {
                     {comparacao.totais.map((total, i) => (
                       <td
                         key={comparacao.colunas[i]}
-                        className={`px-2 py-4 text-center font-titulos font-extrabold text-lg text-vermelho ${
-                          i === comparacao.destaque ? "bg-amarelo/15" : ""
+                        className={`px-2 py-4 text-center font-titulos font-extrabold text-lg text-vermelho transition-colors ${
+                          i === destaque ? "bg-amarelo/15" : ""
                         }`}
                       >
                         {total}
