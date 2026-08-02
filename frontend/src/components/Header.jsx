@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { Link, NavLink } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom"
 import { marca, topbar, header } from "../data/siteContent"
+import { useCarrinho } from "../context/CarrinhoContext"
 import BotaoWhatsApp from "./BotaoWhatsApp"
 
 function ItemMenu({ item, onClick, className = "" }) {
@@ -39,6 +40,46 @@ function Busca({ className = "" }) {
         />
       </div>
     </div>
+  )
+}
+
+// O carrinho só faz sentido no mercado, então o ícone some nas outras páginas.
+function BotaoCarrinho() {
+  const { pathname } = useLocation()
+  const { abrir, quantidadeTotal } = useCarrinho()
+
+  if (!pathname.startsWith("/mercado")) return null
+
+  return (
+    <button
+      type="button"
+      onClick={abrir}
+      aria-label={`Abrir sua lista (${quantidadeTotal} ${
+        quantidadeTotal === 1 ? "item" : "itens"
+      })`}
+      className="relative flex-shrink-0 p-2 rounded-md text-vermelho-escuro hover:bg-gray-100 transition-colors"
+    >
+      <svg
+        className="h-6 w-6"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M3 4h2.2l2.3 10.4a1.6 1.6 0 0 0 1.6 1.3h8.1a1.6 1.6 0 0 0 1.6-1.3L21 7H6" />
+        <circle cx="10" cy="19.5" r="1.3" />
+        <circle cx="17.5" cy="19.5" r="1.3" />
+      </svg>
+
+      {quantidadeTotal > 0 && (
+        <span className="absolute top-0 right-0 h-5 min-w-5 px-1 rounded-full bg-vermelho text-white text-[11px] font-bold flex items-center justify-center">
+          {quantidadeTotal}
+        </span>
+      )}
+    </button>
   )
 }
 
@@ -95,6 +136,8 @@ export default function Header() {
                 ))}
               </ul>
             </nav>
+
+            <BotaoCarrinho />
 
             <BotaoWhatsApp
               mensagem="Olá! Quero fazer um pedido."

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import CarrinhoDrawer from "../components/CarrinhoDrawer";
 
 export default function MainLayouts() {
   return (
@@ -8,6 +9,7 @@ export default function MainLayouts() {
       <Header />
       <Outlet />
       <Footer />
+      <CarrinhoDrawer />
     </div>
   );
 }

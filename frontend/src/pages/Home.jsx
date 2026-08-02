@@ -100,9 +100,10 @@ export default function Home() {
           </h2>
           <div className="flex flex-wrap justify-center gap-4">
             {mercadoCategorias.map((cat) => (
-              <div
+              <Link
                 key={cat.nome}
-                className="basis-[calc(50%-0.5rem)] sm:basis-[calc(33.333%-0.667rem)] md:basis-[calc(16.666%-0.834rem)] flex flex-col items-center justify-center gap-3 bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                to="/mercado"
+                className="basis-[calc(50%-0.5rem)] sm:basis-[calc(33.333%-0.667rem)] md:basis-[calc(16.666%-0.834rem)] flex flex-col items-center justify-center gap-3 bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
               >
                 <span className="h-14 w-14 rounded-full bg-amarelo/30 flex items-center justify-center text-2xl">
                   {cat.icone}
@@ -110,7 +111,7 @@ export default function Home() {
                 <span className="text-sm font-bold text-gray-900 text-center">
                   {cat.nome}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

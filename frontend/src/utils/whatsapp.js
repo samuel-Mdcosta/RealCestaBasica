@@ -24,12 +24,12 @@ function linhaItem(item) {
   return `• ${quantidade}x ${item.nome}`
 }
 
-export function mensagemMercado(itens = []) {
+export function mensagemMercado(itens = [], total) {
   if (itens.length === 0) {
     return "Olá, acabei de ver o site, gostaria de fazer um pedido para entregar."
   }
 
   const lista = itens.map(linhaItem).join("\n")
-  return `Olá, acabei de ver no site estes produtos, gostaria de pedir para entregar:\n${lista}`
-
+  const rodape = total ? `\n\nTotal estimado: ${total}` : ""
+  return `Olá, acabei de ver no site estes produtos, gostaria de pedir para entregar:\n${lista}${rodape}`
 }

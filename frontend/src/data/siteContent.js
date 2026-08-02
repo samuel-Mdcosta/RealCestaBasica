@@ -13,7 +13,7 @@ export const header = {
   busca: "Buscar arroz, feijão, óleo, sabão…",
   menu: [
     { nome: "Cestas", to: "/cestas" },
-    { nome: "Mercado" },
+    { nome: "Mercado", to: "/mercado" },
     { nome: "Ofertas" },
   ],
   cta: "Pedir no WhatsApp",
@@ -23,7 +23,10 @@ export const hero = {
   selo: "OFERTA DA SEMANA",
   titulo: "Cesta básica completa pra sua família",
   precoDestaque: { label: "Cesta x a partir de", valor: "xxxxxxx" },
-  botoes: [{ texto: "Ver as cestas", to: "/cestas" }, { texto: "Mercado completo" }],
+  botoes: [
+    { texto: "Ver as cestas", to: "/cestas" },
+    { texto: "Mercado completo", to: "/mercado" },
+  ],
   nota: "Você fecha o pedido direto no WhatsApp com um atendente da loja.",
 }
 
@@ -143,6 +146,6 @@ export const comoFunciona = [
 
 export const footer = {
   esquerda: "© 2026 Real Cesta Básica — entrega local e retirada na loja",
-  direita: "PIX • Cartão de crédito • Pedidos pelo WhatsApp (11) 90000-0000",
+  direita: "PIX • Cartão de crédito • Pedidos pelo WhatsApp (67) 99253-3808",
   whatsapp: "+55 67 99253-3808",
 }
