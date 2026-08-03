@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react"
-import { Link, NavLink, useLocation } from "react-router-dom"
+import {
+  Link,
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import { marca, topbar, header } from "../data/siteContent"
 import { useCarrinho } from "../context/CarrinhoContext"
 import BotaoWhatsApp from "./BotaoWhatsApp"
@@ -26,20 +32,46 @@ function ItemMenu({ item, onClick, className = "" }) {
   )
 }
 
-function Busca({ className = "" }) {
+// A busca sempre cai no mercado: é lá que os produtos são listados.
+function Busca({ className = "", onEnviar }) {
+  const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const buscaAtual = params.get("busca") ?? ""
+  const [termo, setTermo] = useState(buscaAtual)
+
+  // Mantém o campo igual à URL quando ela muda por fora (limpar busca, voltar).
+  useEffect(() => setTermo(buscaAtual), [buscaAtual])
+
+  const enviar = (e) => {
+    e.preventDefault()
+    const limpo = termo.trim()
+    if (!limpo) return
+
+    navigate(`/mercado?busca=${encodeURIComponent(limpo)}`)
+    onEnviar?.()
+  }
+
   return (
-    <div className={className}>
+    <form role="search" onSubmit={enviar} className={className}>
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+        <button
+          type="submit"
+          aria-label="Buscar"
+          className="absolute left-3 top-1/2 -translate-y-1/2 px-1 text-gray-400 hover:text-vermelho transition-colors"
+        >
           🔍
-        </span>
+        </button>
         <input
-          type="text"
+          type="search"
+          value={termo}
+          onChange={(e) => setTermo(e.target.value)}
+          enterKeyHint="search"
+          aria-label={header.busca}
           placeholder={header.busca}
           className="w-full py-2.5 pl-10 pr-4 rounded-full text-sm text-gray-800 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amarelo"
         />
       </div>
-    </div>
+    </form>
   )
 }
 
@@ -173,7 +205,10 @@ export default function Header() {
           </div>
         </div>
 
-        <Busca className="md:hidden pb-3" />
+        <Busca
+          className="md:hidden pb-3"
+          onEnviar={() => setMenuAberto(false)}
+        />
 
         {menuAberto && (
           <nav id="menu-mobile" className="lg:hidden border-t border-gray-100">

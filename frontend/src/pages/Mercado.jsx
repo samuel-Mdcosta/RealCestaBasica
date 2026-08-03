@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "react-router-dom"
 import {
   estadoVazio,
   faixaWhatsapp,
@@ -7,11 +8,17 @@ import {
   mercadoProdutos,
   mercadoSecoes,
 } from "../data/mercadoContent"
+import {
+  buscaForaDoEscopo,
+  buscaSemResultado,
+  escopoLoja,
+} from "../data/escopoLoja"
 import CardProduto from "../components/CardProduto"
 import BotaoWhatsApp from "../components/BotaoWhatsApp"
 import { useCarrinho } from "../context/CarrinhoContext"
 import { mensagemMercado } from "../utils/whatsapp"
 import { formatarPreco } from "../utils/preco"
+import { categoriaForaDeEscopo, filtrarPorBusca } from "../utils/busca"
 
 const TODOS = "Todos os corredores"
 
@@ -32,18 +39,57 @@ function Corredor({ ativo, children, ...props }) {
   )
 }
 
+// Cartão usado nos três estados sem produto na tela.
+function AvisoBusca({ titulo, children, acao }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-sm border border-black/5 px-6 py-16 text-center">
+      <h3 className="font-titulos font-extrabold text-2xl uppercase text-vermelho-escuro">
+        {titulo}
+      </h3>
+      <div className="text-sm text-gray-500 mt-2 max-w-md mx-auto space-y-2">
+        {children}
+      </div>
+      <div className="mt-6 flex justify-center">{acao}</div>
+    </div>
+  )
+}
+
 export default function Mercado() {
   const [secao, setSecao] = useState(TODOS)
   const [pagina, setPagina] = useState(1)
   const { itens, total } = useCarrinho()
+  const [params, setParams] = useSearchParams()
+  const busca = (params.get("busca") ?? "").trim()
 
-  const filtrados = useMemo(
-    () =>
-      secao === TODOS
-        ? mercadoProdutos
-        : mercadoProdutos.filter((produto) => produto.secao === secao),
-    [secao]
+  // Produto de outro ramo (farmácia, eletrônico…) nem chega a ser procurado no
+  // catálogo: a loja já sabe que não vende.
+  const categoriaBloqueada = useMemo(
+    () => (busca ? categoriaForaDeEscopo(busca) : null),
+    [busca]
   )
+
+  // Busca nova recomeça do zero: sem corredor fixo e na primeira página.
+  useEffect(() => {
+    setSecao(TODOS)
+    setPagina(1)
+  }, [busca])
+
+  const filtrados = useMemo(() => {
+    if (categoriaBloqueada) return []
+
+    const porBusca = busca
+      ? filtrarPorBusca(mercadoProdutos, busca)
+      : mercadoProdutos
+
+    return secao === TODOS
+      ? porBusca
+      : porBusca.filter((produto) => produto.secao === secao)
+  }, [busca, categoriaBloqueada, secao])
+
+  const limparBusca = () => {
+    params.delete("busca")
+    setParams(params)
+  }
 
   const paginas = Math.max(
     1,
@@ -106,9 +152,24 @@ export default function Mercado() {
         </div>
 
         <div className="flex flex-wrap items-end justify-between gap-3 mt-12 mb-8">
-          <h2 className="font-titulos font-extrabold text-3xl md:text-4xl text-black uppercase">
-            {secao === TODOS ? "Todos os produtos" : secao}
-          </h2>
+          <div>
+            <h2 className="font-titulos font-extrabold text-3xl md:text-4xl text-black uppercase">
+              {busca
+                ? `Resultados para “${busca}”`
+                : secao === TODOS
+                  ? "Todos os produtos"
+                  : secao}
+            </h2>
+            {busca && (
+              <button
+                type="button"
+                onClick={limparBusca}
+                className="text-vermelho font-bold text-sm hover:underline mt-1"
+              >
+                ← Limpar busca e ver todos os produtos
+              </button>
+            )}
+          </div>
           <p className="text-sm text-gray-500">
             {filtrados.length}{" "}
             {filtrados.length === 1 ? "produto" : "produtos"}
@@ -116,21 +177,60 @@ export default function Mercado() {
           </p>
         </div>
 
-        {visiveis.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-black/5 px-6 py-16 text-center">
-            <h3 className="font-titulos font-extrabold text-2xl uppercase text-vermelho-escuro">
-              {estadoVazio.titulo}
-            </h3>
-            <p className="text-sm text-gray-500 mt-2 max-w-md mx-auto">
-              {estadoVazio.texto}
+        {categoriaBloqueada ? (
+          <AvisoBusca
+            titulo={buscaForaDoEscopo.titulo}
+            acao={
+              <button
+                type="button"
+                onClick={limparBusca}
+                className="border-2 border-vermelho text-vermelho font-bold px-6 py-3 rounded-md hover:bg-vermelho hover:text-white transition-all"
+              >
+                {buscaForaDoEscopo.botao}
+              </button>
+            }
+          >
+            <p>
+              “{busca}” é item de{" "}
+              <strong className="text-vermelho-escuro">
+                {categoriaBloqueada}
+              </strong>
+              , e a loja não trabalha com esse tipo de produto.
             </p>
-            <BotaoWhatsApp
-              mensagem={`Olá! Queria saber sobre os produtos do corredor ${secao}.`}
-              className="mt-6 px-6 py-3 rounded-md"
-            >
-              Falar com atendente
-            </BotaoWhatsApp>
-          </div>
+            <p>{escopoLoja.resumo}</p>
+          </AvisoBusca>
+        ) : busca && visiveis.length === 0 ? (
+          <AvisoBusca
+            titulo={buscaSemResultado.titulo}
+            acao={
+              <BotaoWhatsApp
+                mensagem={`Olá! Procurei por "${busca}" no site e não encontrei. Vocês têm esse produto?`}
+                className="px-6 py-3 rounded-md"
+              >
+                {buscaSemResultado.botao}
+              </BotaoWhatsApp>
+            }
+          >
+            <p>
+              Nenhum produto do catálogo bate com “{busca}”
+              {secao !== TODOS && ` no corredor ${secao}`}.
+            </p>
+            <p>{buscaSemResultado.texto}</p>
+          </AvisoBusca>
+        ) : visiveis.length === 0 ? (
+          <AvisoBusca
+            titulo={estadoVazio.titulo}
+            acao={
+              <BotaoWhatsApp
+                mensagem={`Olá! Queria saber sobre os produtos do corredor ${secao}.`}
+                className="px-6 py-3 rounded-md"
+              >
+                Falar com atendente
+              </BotaoWhatsApp>
+            }
+          >
+            <p>{estadoVazio.texto}</p>
+          </AvisoBusca>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {visiveis.map((produto) => (

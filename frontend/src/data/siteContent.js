@@ -14,7 +14,7 @@ export const header = {
   menu: [
     { nome: "Cestas", to: "/cestas" },
     { nome: "Mercado", to: "/mercado" },
-    { nome: "Ofertas" },
+    { nome: "Oferta", to: "/ofertas" },
   ],
   cta: "Pedir no WhatsApp",
 }
