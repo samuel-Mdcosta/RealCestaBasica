@@ -1,10 +1,13 @@
 import { linkWhatsApp } from "../utils/whatsapp"
+import { baseBotao, coresBotao } from "./estilosBotao"
 
-const cores = {
-  verde: "bg-whatsapp text-white",
-  amarelo: "bg-amarelo text-vermelho-escuro",
-}
-
+/**
+ * Botão de CONTATO: leva direto pra conversa com uma mensagem pronta (dúvida,
+ * orçamento, "vocês têm tal produto?").
+ *
+ * Pedido não passa por aqui — quem pede usa o <BotaoPedido>, que abre o
+ * checkout pra pegar endereço, frete e pagamento antes de mandar pro WhatsApp.
+ */
 export default function BotaoWhatsApp({
   mensagem,
   children,
@@ -16,7 +19,7 @@ export default function BotaoWhatsApp({
       href={linkWhatsApp(mensagem)}
       target="_blank"
       rel="noreferrer"
-      className={`inline-flex items-center justify-center gap-2 font-bold hover:brightness-95 transition-all ${cores[cor]} ${className}`}
+      className={`${baseBotao} ${coresBotao[cor]} ${className}`}
     >
       {children}
     </a>

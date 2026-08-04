@@ -1,13 +1,5 @@
 import { foraDeEscopo } from "../data/escopoLoja"
-
-// "Feijão" -> "feijao": a busca ignora acento e maiúscula.
-export function normalizar(texto = "") {
-  return texto
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .trim()
-}
+import { normalizar } from "./texto"
 
 // Palavras de 1 letra ("e", "5") não ajudam a filtrar e só geram falso positivo.
 function palavras(termo) {

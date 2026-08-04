@@ -1,8 +1,9 @@
 // O telefone do checkout e o rodapé não ficam aqui: vêm de `footer` no
 // siteContent.js, que já guarda o número real usado em todo o site.
+// A moeda saiu daqui pro `siteConfig`: frete e cesta também são formatados com
+// ela, e nenhum dos dois é "mercado".
 export const mercadoConfig = {
   itensPorPagina: 20,
-  moeda: "BRL",
 }
 
 export const mercadoHero = {
@@ -70,9 +71,11 @@ export const mercadoProdutos = [
   { nome: "Shampoo — 350 ml", preco: "R$ 11,90", secao: "Higiene", oferta: false },
 ]
 
-export const faixaWhatsapp = {
-  texto: "Montou a lista? Finalize com um atendente.",
-  botao: "Enviar pedido no WhatsApp",
+// O botão não vai mais direto pro WhatsApp: abre o checkout, que pega endereço,
+// frete e pagamento antes. Daí "finalizar" no lugar de "enviar".
+export const faixaPedido = {
+  texto: "Montou a lista? Veja o total com a entrega.",
+  botao: "Finalizar pedido",
 }
 
 export const estadoVazio = {

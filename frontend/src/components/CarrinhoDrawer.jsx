@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import { useCarrinho } from "../context/CarrinhoContext"
-import { carrinhoVazio, faixaWhatsapp } from "../data/mercadoContent"
+import { carrinhoVazio, faixaPedido } from "../data/mercadoContent"
+import { useTravaScroll } from "../hooks/useTravaScroll"
 import { formatarPreco, precoParaNumero } from "../utils/preco"
-import { mensagemMercado } from "../utils/whatsapp"
-import BotaoWhatsApp from "./BotaoWhatsApp"
+import BotaoPedido from "./BotaoPedido"
 
 function BotaoQuantidade({ children, ...props }) {
   return (
@@ -29,6 +29,10 @@ export default function CarrinhoDrawer() {
     total,
   } = useCarrinho()
 
+  // A trava de scroll é compartilhada com o checkout: se ela fosse local, fechar
+  // o drawer com o checkout aberto por cima devolveria o scroll do fundo.
+  useTravaScroll(aberto)
+
   useEffect(() => {
     if (!aberto) return
 
@@ -36,12 +40,8 @@ export default function CarrinhoDrawer() {
       if (e.key === "Escape") fechar()
     }
 
-    document.body.style.overflow = "hidden"
     window.addEventListener("keydown", fecharComEsc)
-    return () => {
-      document.body.style.overflow = ""
-      window.removeEventListener("keydown", fecharComEsc)
-    }
+    return () => window.removeEventListener("keydown", fecharComEsc)
   }, [aberto, fechar])
 
   return (
@@ -106,7 +106,7 @@ export default function CarrinhoDrawer() {
         ) : (
           <ul className="flex-grow overflow-y-auto divide-y divide-black/5">
             {itens.map((item) => (
-              <li key={item.nome} className="p-4 flex gap-3">
+              <li key={item.id} className="p-4 flex gap-3">
                 <div className="flex-grow min-w-0">
                   <p className="text-sm font-semibold text-gray-800 leading-snug">
                     {item.nome}
@@ -117,7 +117,7 @@ export default function CarrinhoDrawer() {
 
                   <div className="flex items-center gap-2 mt-2">
                     <BotaoQuantidade
-                      onClick={() => alterarQuantidade(item.nome, -1)}
+                      onClick={() => alterarQuantidade(item.id, -1)}
                       aria-label={`Diminuir ${item.nome}`}
                     >
                       −
@@ -126,7 +126,7 @@ export default function CarrinhoDrawer() {
                       {item.quantidade}
                     </span>
                     <BotaoQuantidade
-                      onClick={() => alterarQuantidade(item.nome, 1)}
+                      onClick={() => alterarQuantidade(item.id, 1)}
                       aria-label={`Aumentar ${item.nome}`}
                     >
                       +
@@ -140,7 +140,7 @@ export default function CarrinhoDrawer() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => remover(item.nome)}
+                    onClick={() => remover(item.id)}
                     className="text-xs text-gray-400 hover:text-vermelho transition-colors"
                   >
                     remover
@@ -161,14 +161,9 @@ export default function CarrinhoDrawer() {
             </span>
           </div>
 
-          <BotaoWhatsApp
-            mensagem={mensagemMercado(itens, formatarPreco(total))}
-            className={`w-full px-6 py-3 rounded-md ${
-              itens.length === 0 ? "opacity-50 pointer-events-none" : ""
-            }`}
-          >
-            {faixaWhatsapp.botao}
-          </BotaoWhatsApp>
+          <BotaoPedido className="w-full px-6 py-3 rounded-md">
+            {faixaPedido.botao}
+          </BotaoPedido>
 
           {itens.length > 0 && (
             <button

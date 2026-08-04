@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useSearchParams } from "react-router-dom"
 import {
   estadoVazio,
-  faixaWhatsapp,
+  faixaPedido,
   mercadoConfig,
   mercadoHero,
   mercadoProdutos,
@@ -15,9 +15,7 @@ import {
 } from "../data/escopoLoja"
 import CardProduto from "../components/CardProduto"
 import BotaoWhatsApp from "../components/BotaoWhatsApp"
-import { useCarrinho } from "../context/CarrinhoContext"
-import { mensagemMercado } from "../utils/whatsapp"
-import { formatarPreco } from "../utils/preco"
+import BotaoPedido from "../components/BotaoPedido"
 import { categoriaForaDeEscopo, filtrarPorBusca } from "../utils/busca"
 
 const TODOS = "Todos os corredores"
@@ -57,7 +55,6 @@ function AvisoBusca({ titulo, children, acao }) {
 export default function Mercado() {
   const [secao, setSecao] = useState(TODOS)
   const [pagina, setPagina] = useState(1)
-  const { itens, total } = useCarrinho()
   const [params, setParams] = useSearchParams()
   const busca = (params.get("busca") ?? "").trim()
 
@@ -281,15 +278,11 @@ export default function Mercado() {
       <section className="bg-vermelho text-white">
         <div className="container mx-auto px-4 py-10 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <h2 className="font-titulos font-extrabold text-2xl md:text-3xl uppercase">
-            {faixaWhatsapp.texto}
+            {faixaPedido.texto}
           </h2>
-          <BotaoWhatsApp
-            mensagem={mensagemMercado(itens, formatarPreco(total))}
-            cor="amarelo"
-            className="px-6 py-3 rounded-md flex-shrink-0"
-          >
-            {faixaWhatsapp.botao}
-          </BotaoWhatsApp>
+          <BotaoPedido cor="amarelo" className="px-6 py-3 rounded-md flex-shrink-0">
+            {faixaPedido.botao}
+          </BotaoPedido>
         </div>
       </section>
     </main>

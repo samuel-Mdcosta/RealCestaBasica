@@ -1,6 +1,5 @@
 import PlaceholderFoto from "./PlaceholderFoto"
-import BotaoWhatsApp from "./BotaoWhatsApp"
-import { mensagemCesta } from "../utils/whatsapp"
+import BotaoPedido from "./BotaoPedido"
 
 export default function CardCesta({ cesta, onSelecionar, selecionada = false }) {
   const clicavel = typeof onSelecionar === "function"
@@ -44,12 +43,9 @@ export default function CardCesta({ cesta, onSelecionar, selecionada = false }) 
             {cesta.preco}
           </span>
           <span onClick={(e) => e.stopPropagation()}>
-            <BotaoWhatsApp
-              mensagem={mensagemCesta(cesta)}
-              className="px-4 py-2 rounded-full"
-            >
+            <BotaoPedido produto={cesta} className="px-4 py-2 rounded-full">
               Pedir agora
-            </BotaoWhatsApp>
+            </BotaoPedido>
           </span>
         </div>
       </div>

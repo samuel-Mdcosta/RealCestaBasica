@@ -2,12 +2,13 @@ import {
   ofertaAvisoLegal,
   ofertaBrinde,
   ofertaFaixaFinal,
+  ofertaItem,
   ofertaItens,
   ofertaItensTitulo,
   ofertaProduto,
 } from "../data/ofertasContent"
 import PlaceholderFoto from "../components/PlaceholderFoto"
-import BotaoWhatsApp from "../components/BotaoWhatsApp"
+import BotaoPedido from "../components/BotaoPedido"
 import ComoFunciona from "../components/ComoFunciona"
 
 function Preco({ valor, className = "", centavosClassName = "" }) {
@@ -67,12 +68,12 @@ export default function Ofertas() {
             </p>
 
             <div className="mt-6">
-              <BotaoWhatsApp
-                mensagem={ofertaProduto.mensagem}
+              <BotaoPedido
+                produto={ofertaItem}
                 className="px-6 py-3 rounded-md shadow-sm"
               >
                 {ofertaProduto.cta}
-              </BotaoWhatsApp>
+              </BotaoPedido>
             </div>
 
             <p className="text-sm text-vermelho-escuro/70 mt-4">
@@ -168,13 +169,13 @@ export default function Ofertas() {
             </p>
           </div>
 
-          <BotaoWhatsApp
-            mensagem={ofertaProduto.mensagem}
+          <BotaoPedido
+            produto={ofertaItem}
             cor="amarelo"
             className="px-6 py-3 rounded-md flex-shrink-0"
           >
             {ofertaFaixaFinal.botao}
-          </BotaoWhatsApp>
+          </BotaoPedido>
         </div>
       </section>
 

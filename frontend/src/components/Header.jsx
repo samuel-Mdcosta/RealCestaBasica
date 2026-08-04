@@ -32,14 +32,12 @@ function ItemMenu({ item, onClick, className = "" }) {
   )
 }
 
-// A busca sempre cai no mercado: é lá que os produtos são listados.
 function Busca({ className = "", onEnviar }) {
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const buscaAtual = params.get("busca") ?? ""
   const [termo, setTermo] = useState(buscaAtual)
 
-  // Mantém o campo igual à URL quando ela muda por fora (limpar busca, voltar).
   useEffect(() => setTermo(buscaAtual), [buscaAtual])
 
   const enviar = (e) => {
@@ -75,7 +73,6 @@ function Busca({ className = "", onEnviar }) {
   )
 }
 
-// O carrinho só faz sentido no mercado, então o ícone some nas outras páginas.
 function BotaoCarrinho() {
   const { pathname } = useLocation()
   const { abrir, quantidadeTotal } = useCarrinho()
@@ -172,7 +169,7 @@ export default function Header() {
             <BotaoCarrinho />
 
             <BotaoWhatsApp
-              mensagem="Olá! Quero fazer um pedido."
+              mensagem={header.ctaMensagem}
               className="hidden sm:flex flex-shrink-0 text-sm px-4 py-2.5 rounded-full shadow-sm whitespace-nowrap"
             >
               {header.cta}
@@ -229,7 +226,7 @@ export default function Header() {
             </ul>
 
             <BotaoWhatsApp
-              mensagem="Olá! Quero fazer um pedido."
+              mensagem={header.ctaMensagem}
               className="sm:hidden flex text-sm px-4 py-3 rounded-full shadow-sm my-3"
             >
               {header.cta}

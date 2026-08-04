@@ -3,7 +3,7 @@ import { useCarrinho } from "../context/CarrinhoContext"
 
 export default function CardProduto({ produto }) {
   const { adicionar, abrir, quantidadeDe } = useCarrinho()
-  const quantidade = quantidadeDe(produto.nome)
+  const quantidade = quantidadeDe(produto)
 
   const aoAdicionar = () => {
     adicionar(produto)

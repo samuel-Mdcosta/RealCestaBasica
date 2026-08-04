@@ -1,12 +1,18 @@
+import { entregaConfig, pagamentosResumo } from "./entregaContent"
+
 export const marca = {
   nome: "Real Cesta Básica",
   logo: "/imagens/logoBox.png",
 }
 
+export const siteConfig = {
+  moeda: "BRL",
+}
+
 export const topbar = [
-  "Entrega local no mesmo dia",
+  `Entrega em ${entregaConfig.cidade}/${entregaConfig.uf}`,
   "Retirada grátis na loja",
-  "PIX e cartão de crédito",
+  pagamentosResumo,
 ]
 
 export const header = {
@@ -16,6 +22,7 @@ export const header = {
     { nome: "Mercado", to: "/mercado" },
     { nome: "Oferta", to: "/ofertas" },
   ],
+  ctaMensagem: "Olá! Quero fazer um pedido.",
   cta: "Pedir no WhatsApp",
 }
 
@@ -134,18 +141,20 @@ export const comoFunciona = [
   },
   {
     passo: 2,
-    titulo: "Envie o pedido no WhatsApp",
-    descricao: "Um atendente da loja confirma tudo com você e fecha o valor.",
+    titulo: "Preencha entrega e pagamento",
+    descricao:
+      "O site soma o frete e mostra o total antes de você decidir se pede.",
   },
   {
     passo: 3,
-    titulo: "Pague e receba",
-    descricao: "PIX ou cartão de crédito. Entrega local ou retirada na loja.",
+    titulo: "Confirme no WhatsApp",
+    descricao:
+      "O pedido chega pronto pro atendente. Ele confirma o estoque e envia a chave PIX ou o link de pagamento.",
   },
 ]
 
 export const footer = {
-  esquerda: "© 2026 Real Cesta Básica — entrega local e retirada na loja",
-  direita: "PIX • Cartão de crédito • Pedidos pelo WhatsApp (67) 99253-3808",
+  esquerda: `© 2026 Real Cesta Básica — entrega em ${entregaConfig.cidade}/${entregaConfig.uf} e retirada na loja`,
+  direita: `${pagamentosResumo} • Pedidos pelo WhatsApp (67) 99253-3808`,
   whatsapp: "+55 67 99253-3808",
 }
