@@ -1,3 +1,5 @@
+import { cestas } from "./siteContent"
+
 export const cestasHero = {
   selo: "CESTAS PRONTAS",
   titulo: "Escolha o tamanho certo pra sua casa",
@@ -10,10 +12,23 @@ export const cestasListagem = {
   visiveisInicial: 4,
 }
 
+const colunasComparacao = [
+  { sigla: "MINI", rotulo: "MINI" },
+  { sigla: "MINI Especial", rotulo: "MINI Especial" },
+  { sigla: "B", rotulo: "B" },
+  { sigla: "familia", rotulo: "Família" },
+  { sigla: "H", rotulo: "H" },
+  { sigla: "c", rotulo: "média" },
+  { sigla: "gigante", rotulo: "Gigante" },
+]
+
+const precoDaCesta = (sigla) =>
+  cestas.find((cesta) => cesta.sigla === sigla)?.preco ?? "—"
+
 export const comparacao = {
   titulo: "O que vem em cada cesta",
-  colunas: ["MINI", "MINI Especial", "B", "Família", "H", "média", "Gigante"],
-  destaque: 4, 
+  colunas: colunasComparacao.map((coluna) => coluna.rotulo),
+  destaque: 4,
   linhas: [
     { produto: "Arroz branco tipo 1", valores: ["5 kg", "5 kg", "10 kg", "10 kg", "10 kg", "15 kg", "25 kg"] },
     { produto: "Feijão carioca", valores:      ["1 kg", "1 kg", "1 kg", "1 kg", "2 kg", "2 kg", "3 kg"] },
@@ -38,16 +53,23 @@ export const comparacao = {
     { produto: "Água sanitária 1 L", valores:           ["—", "—", "—", "-", "1 un", "1 un", "1 un"] },
     { produto: "Amaciante 2 L", valores:                ["—", "—", "—", "—", "1 un", "1 un", "1 un"] },
   ],
-  totais: [
-    "R$ 89,90",
-    "R$ 134,90",
-    "R$ 169,90",
-    "R$ 189,90",
-    "R$ 289,00",
-    "R$ 379,90",
-    "R$ 589,90",
-  ],
+  totais: colunasComparacao.map((coluna) => precoDaCesta(coluna.sigla)),
   nota: "Marcas podem variar conforme o estoque, sempre mantendo a mesma qualidade. Confirmação item a item pelo WhatsApp.",
+}
+
+// A tabela marca ausência ora com "-", ora com "—".
+const semItem = (valor) => !valor || valor === "-" || valor === "—"
+
+// "O que vem nesta cesta" a partir da própria tabela de comparação. Quem mostra
+// o conteúdo de uma cesta fora desta página (a oferta da semana) importa daqui
+// em vez de redigitar a lista e sair do ar com o catálogo.
+export function itensDaCesta(sigla) {
+  const coluna = colunasComparacao.findIndex((item) => item.sigla === sigla)
+  if (coluna === -1) return []
+
+  return comparacao.linhas
+    .filter((linha) => !semItem(linha.valores[coluna]))
+    .map((linha) => ({ nome: linha.produto, qtd: linha.valores[coluna] }))
 }
 
 export const cestasChamadas = {

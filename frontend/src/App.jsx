@@ -6,7 +6,6 @@ import Mercado from './pages/Mercado'
 import Ofertas from './pages/Ofertas'
 import { CarrinhoProvider } from './context/CarrinhoContext'
 import { CheckoutProvider } from './context/CheckoutContext'
-import './App.css'
 
 export default function App(){
   return(
