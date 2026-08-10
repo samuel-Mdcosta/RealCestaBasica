@@ -1,12 +1,9 @@
 import { entregaConfig, pagamentosResumo } from "./entregaContent"
+import { precoParaNumero } from "../utils/preco"
 
 export const marca = {
   nome: "Real Cesta Básica",
   logo: "/imagens/logoBox.png",
-}
-
-export const siteConfig = {
-  moeda: "BRL",
 }
 
 export const topbar = [
@@ -24,17 +21,6 @@ export const header = {
   ],
   ctaMensagem: "Olá! Quero fazer um pedido.",
   cta: "Pedir no WhatsApp",
-}
-
-export const hero = {
-  selo: "OFERTA DA SEMANA",
-  titulo: "Cesta básica completa pra sua família",
-  precoDestaque: { label: "Cesta x a partir de", valor: "xxxxxxx" },
-  botoes: [
-    { texto: "Ver as cestas", to: "/cestas" },
-    { texto: "Mercado completo", to: "/mercado" },
-  ],
-  nota: "Você fecha o pedido direto no WhatsApp com um atendente da loja.",
 }
 
 export const cestasSection = {
@@ -120,6 +106,27 @@ const siglasHome = ["mini", "familia", "gigante"]
 export const cestasHome = cestas.filter((cesta) =>
   siglasHome.includes(cesta.sigla.toLowerCase())
 )
+
+// Fica depois do catálogo porque lê dele: o hero promete "a partir de", então o
+// valor tem que ser o da cesta mais barata. Era o literal "xxxxxxx" na primeira
+// dobra da home, e subir o preço da MINI deixaria qualquer número fixo mentindo.
+const precoMaisBarato = cestas.reduce(
+  (menor, cesta) =>
+    precoParaNumero(cesta.preco) < precoParaNumero(menor) ? cesta.preco : menor,
+  cestas[0].preco
+)
+
+export const hero = {
+  selo: "OFERTA DA SEMANA",
+  titulo: "Cesta básica completa pra sua família",
+  precoDestaque: { label: "Cestas a partir de", valor: precoMaisBarato },
+  foto: "foto: cesta completa",
+  botoes: [
+    { texto: "Ver as cestas", to: "/cestas" },
+    { texto: "Mercado completo", to: "/mercado" },
+  ],
+  nota: "Você fecha o pedido direto no WhatsApp com um atendente da loja.",
+}
 
 export const mercadoSection = {
   titulo: "Mercado online",

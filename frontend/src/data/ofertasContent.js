@@ -4,7 +4,7 @@ import { itensDaCesta } from "./cestasContent"
 import { formatarPreco, precoParaNumero } from "../utils/preco"
 
 const siglaDaOferta = "B"
-const precoOferta = "R$ 160"
+const precoOferta = "R$ 160,00"
 
 const cestaDaOferta = cestas.find((cesta) => cesta.sigla === siglaDaOferta)
 

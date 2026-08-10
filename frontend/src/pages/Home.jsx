@@ -7,18 +7,9 @@ import {
   mercadoCategorias,
 } from "../data/siteContent"
 import PlaceholderFoto from "../components/PlaceholderFoto"
+import Preco from "../components/Preco"
 import CardCesta from "../components/CardCesta"
 import ComoFunciona from "../components/ComoFunciona"
-
-function Preco({ valor, className = "", centavosClassName = "" }) {
-  const [inteiro, centavos] = valor.split(",")
-  return (
-    <p className={className}>
-      {inteiro}
-      <span className={centavosClassName}>,{centavos}</span>
-    </p>
-  )
-}
 
 export default function Home() {
   return (
@@ -68,6 +59,7 @@ export default function Home() {
           </div>
 
           <PlaceholderFoto
+            texto={hero.foto}
             className="rounded-2xl h-64 md:h-96"
           />
         </div>

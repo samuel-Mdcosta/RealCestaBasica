@@ -8,18 +8,9 @@ import {
   ofertaProduto,
 } from "../data/ofertasContent"
 import PlaceholderFoto from "../components/PlaceholderFoto"
+import Preco from "../components/Preco"
 import BotaoPedido from "../components/BotaoPedido"
 import ComoFunciona from "../components/ComoFunciona"
-
-function Preco({ valor, className = "", centavosClassName = "" }) {
-  const [inteiro, centavos] = valor.split(",")
-  return (
-    <p className={className}>
-      {inteiro}
-      <span className={centavosClassName}>,{centavos}</span>
-    </p>
-  )
-}
 
 export default function Ofertas() {
   return (

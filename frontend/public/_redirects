@@ -1,0 +1,6 @@
+# Netlify (e hosts compatíveis). As rotas do site são resolvidas pelo React
+# Router dentro do navegador — no servidor existe um arquivo só, o index.html.
+# Sem esta regra, abrir /cestas direto faz o servidor procurar um arquivo com
+# esse nome, não achar e devolver o 404 dele, antes do React sequer carregar.
+# Pega link colado no WhatsApp, F5 no meio do site e URL digitada na mão.
+/*    /index.html   200

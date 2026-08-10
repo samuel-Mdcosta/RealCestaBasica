@@ -1,4 +1,28 @@
-# React + Vite
+# Real Cesta Básica — frontend
+
+React + Vite + Tailwind v4. `npm run dev` sobe local, `npm run build` gera `dist/`.
+
+## Deploy: a regra de reescrita é obrigatória
+
+O site usa `BrowserRouter`, então `/cestas`, `/mercado` e `/ofertas` só existem no
+navegador — o build publica um `index.html` e mais nada. Sem mandar o servidor
+devolver o `index.html` para qualquer caminho, abrir uma dessas URLs direto (link
+compartilhado no WhatsApp, F5, URL digitada) cai no 404 do próprio servidor e a
+página 404 do site nunca aparece.
+
+Já vai configurado para os dois hosts mais comuns — apague o que não usar:
+
+- **Vercel**: `vercel.json` (com _Root Directory_ apontando para `frontend/`).
+- **Netlify** e compatíveis: `public/_redirects`, copiado para `dist/` no build.
+
+Em nginx/Apache/S3 a regra equivalente é `try_files $uri /index.html` (ou definir
+o `index.html` como documento de erro 404).
+
+---
+
+Este projeto partiu do template abaixo.
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
