@@ -153,6 +153,19 @@ export const comoFunciona = [
   },
 ]
 
+export const naoEncontrada = {
+  codigo: "404",
+  titulo: "Essa página não existe",
+  texto:
+    "O link pode estar errado ou a página saiu do ar. Veja as cestas prontas, procure no mercado online ou chame um atendente que a gente acha o que você precisa.",
+  botoes: [
+    { texto: "Voltar pro início", to: "/" },
+    { texto: "Ver as cestas", to: "/cestas" },
+  ],
+  ctaMensagem: "Olá! Não encontrei o que procurava no site.",
+  cta: "Falar com atendente",
+}
+
 export const footer = {
   esquerda: `© 2026 Real Cesta Básica — entrega em ${entregaConfig.cidade}/${entregaConfig.uf} e retirada na loja`,
   direita: `${pagamentosResumo} • Pedidos pelo WhatsApp (67) 99253-3808`,

@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react"
-import {
-  Link,
-  NavLink,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom"
+import { Link, NavLink, useNavigate, useSearchParams } from "react-router-dom"
 import { marca, topbar, header } from "../data/siteContent"
 import { useCarrinho } from "../context/CarrinhoContext"
 import BotaoWhatsApp from "./BotaoWhatsApp"
@@ -74,10 +68,7 @@ function Busca({ className = "", onEnviar }) {
 }
 
 function BotaoCarrinho() {
-  const { pathname } = useLocation()
   const { abrir, quantidadeTotal } = useCarrinho()
-
-  if (!pathname.startsWith("/mercado")) return null
 
   return (
     <button
